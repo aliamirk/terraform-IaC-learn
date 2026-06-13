@@ -12,11 +12,6 @@ variable "input_bucket_id" {
   description = "ID (name) of the S3 input bucket for the notification resource"
 }
 
-variable "lambda_function_arn" {
-  type        = string
-  description = "ARN of the Lambda function that will consume the queue"
-}
-
 variable "tags" {
   type    = map(string)
   default = {}

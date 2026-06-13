@@ -1,4 +1,4 @@
-# ── SNS topic for alarm notifications ───────────────────────────────────────
+
 resource "aws_sns_topic" "alerts" {
   name = "${var.project_name}-pipeline-alerts"
   tags = var.tags
@@ -11,7 +11,6 @@ resource "aws_sns_topic_subscription" "email" {
   endpoint  = var.alert_email
 }
 
-# ── Alarms ───────────────────────────────────────────────────────────────────
 
 resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   alarm_name          = "${var.project_name}-lambda-errors"
@@ -78,7 +77,6 @@ resource "aws_cloudwatch_metric_alarm" "lambda_duration_p99" {
   tags                = var.tags
 }
 
-# ── Dashboard ────────────────────────────────────────────────────────────────
 resource "aws_cloudwatch_dashboard" "pipeline" {
   dashboard_name = "${var.project_name}-pipeline"
 
@@ -88,7 +86,10 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
       # Row 1: Lambda health
       {
         type   = "metric"
-        x = 0; y = 0; width = 8; height = 6
+        x      = 0
+        y      = 0
+        width  = 8
+        height = 6
         properties = {
           title  = "Lambda — invocations & errors"
           view   = "timeSeries"
@@ -103,7 +104,10 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
       },
       {
         type   = "metric"
-        x = 8; y = 0; width = 8; height = 6
+        x      = 8
+        y      = 0
+        width  = 8
+        height = 6
         properties = {
           title  = "Lambda — duration (p50 / p90 / p99)"
           view   = "timeSeries"
@@ -117,7 +121,10 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
       },
       {
         type   = "metric"
-        x = 16; y = 0; width = 8; height = 6
+        x      = 16
+        y      = 0
+        width  = 8
+        height = 6
         properties = {
           title  = "Lambda — concurrent executions"
           view   = "timeSeries"
@@ -132,7 +139,10 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
       # Row 2: SQS queues
       {
         type   = "metric"
-        x = 0; y = 6; width = 8; height = 6
+        x      = 0
+        y      = 6
+        width  = 8
+        height = 6
         properties = {
           title  = "SQS — queue depth"
           view   = "timeSeries"
@@ -146,7 +156,10 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
       },
       {
         type   = "metric"
-        x = 8; y = 6; width = 8; height = 6
+        x      = 8
+        y      = 6
+        width  = 8
+        height = 6
         properties = {
           title  = "DLQ — messages (should always be 0)"
           view   = "timeSeries"
@@ -162,7 +175,10 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
       },
       {
         type   = "metric"
-        x = 16; y = 6; width = 8; height = 6
+        x      = 16
+        y      = 6
+        width  = 8
+        height = 6
         properties = {
           title  = "SQS — message age (oldest message)"
           view   = "timeSeries"
@@ -177,7 +193,10 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
       # Row 3: Custom pipeline metrics
       {
         type   = "metric"
-        x = 0; y = 12; width = 8; height = 6
+        x      = 0
+        y      = 12
+        width  = 8
+        height = 6
         properties = {
           title  = "Pipeline — images processed vs errors"
           view   = "timeSeries"
@@ -192,7 +211,10 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
       },
       {
         type   = "metric"
-        x = 8; y = 12; width = 8; height = 6
+        x      = 8
+        y      = 12
+        width  = 8
+        height = 6
         properties = {
           title  = "Pipeline — duplicate skip rate (%)"
           view   = "timeSeries"
@@ -205,7 +227,10 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
       },
       {
         type   = "metric"
-        x = 16; y = 12; width = 8; height = 6
+        x      = 16
+        y      = 12
+        width  = 8
+        height = 6
         properties = {
           title  = "Pipeline — batch size"
           view   = "timeSeries"
@@ -220,7 +245,10 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
       # Row 4: DynamoDB
       {
         type   = "metric"
-        x = 0; y = 18; width = 12; height = 6
+        x      = 0
+        y      = 18
+        width  = 12
+        height = 6
         properties = {
           title  = "DynamoDB — read/write consumed capacity"
           view   = "timeSeries"
@@ -234,7 +262,10 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
       },
       {
         type   = "metric"
-        x = 12; y = 18; width = 12; height = 6
+        x      = 12
+        y      = 18
+        width  = 12
+        height = 6
         properties = {
           title  = "DynamoDB — latency (successful requests)"
           view   = "timeSeries"
@@ -250,7 +281,10 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
       # Row 5: Alarm status overview
       {
         type   = "alarm"
-        x = 0; y = 24; width = 24; height = 3
+        x      = 0
+        y      = 24
+        width  = 24
+        height = 3
         properties = {
           title = "Alarm status overview"
           alarms = [

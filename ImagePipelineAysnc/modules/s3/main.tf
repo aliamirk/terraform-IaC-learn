@@ -45,5 +45,3 @@ resource "aws_s3_bucket_lifecycle_configuration" "input" {
     filter {}
   }
 }
-# Note: S3 → SQS notification is now managed inside the SQS module
-# so S3 and SQS are configured together without circular dependencies.

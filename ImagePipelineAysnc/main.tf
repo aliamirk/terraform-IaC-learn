@@ -41,9 +41,16 @@ module "s3" {
   tags               = local.tags
 }
 
+# ── SQS — needs S3 bucket info (no Lambda dependency now) ────────────────────
+module "sqs" {
+  source           = "./modules/sqs"
+  project_name     = local.project_env
+  input_bucket_arn = module.s3.input_bucket_arn
+  input_bucket_id  = module.s3.input_bucket_id
+  tags             = local.tags
+}
+
 # ── IAM — needs bucket ARNs, DynamoDB ARN, SQS ARN ──────────────────────────
-# We construct bucket ARNs directly (predictable pattern) to avoid
-# a circular dependency between IAM and SQS.
 module "iam" {
   source             = "./modules/iam"
   project_name       = local.project_env
@@ -52,8 +59,6 @@ module "iam" {
   dynamodb_table_arn = module.dynamodb.table_arn
   sqs_queue_arn      = module.sqs.queue_arn
   tags               = local.tags
-
-  depends_on = [module.s3, module.dynamodb, module.sqs]
 }
 
 # ── Lambda (needs IAM role, DynamoDB name, output bucket name) ───────────────
@@ -68,20 +73,17 @@ module "lambda" {
   layer_s3_key        = var.layer_s3_key
   metrics_namespace   = var.metrics_namespace
   tags                = local.tags
-
-  depends_on = [module.iam]
 }
 
-# ── SQS — needs S3 bucket info and Lambda ARN ────────────────────────────────
-module "sqs" {
-  source              = "./modules/sqs"
-  project_name        = local.project_env
-  input_bucket_arn    = module.s3.input_bucket_arn
-  input_bucket_id     = module.s3.input_bucket_id
-  lambda_function_arn = module.lambda.function_arn
-  tags                = local.tags
+# ── SQS → Lambda event source mapping (lives here to avoid cycles) ───────────
+resource "aws_lambda_event_source_mapping" "sqs_to_lambda" {
+  event_source_arn                   = module.sqs.queue_arn
+  function_name                      = module.lambda.function_arn
+  batch_size                         = 10
+  maximum_batching_window_in_seconds = 30
+  enabled                            = true
 
-  depends_on = [module.lambda, module.s3]
+  function_response_types = ["ReportBatchItemFailures"]
 }
 
 # ── CloudWatch dashboard + alarms ───────────────────────────────────────────
@@ -96,6 +98,4 @@ module "cloudwatch" {
   metrics_namespace    = var.metrics_namespace
   alert_email          = var.alert_email
   tags                 = local.tags
-
-  depends_on = [module.lambda, module.sqs, module.dynamodb]
 }
