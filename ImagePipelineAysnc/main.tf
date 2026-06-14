@@ -89,6 +89,7 @@ resource "aws_lambda_event_source_mapping" "sqs_to_lambda" {
 # ── CloudWatch dashboard + alarms ───────────────────────────────────────────
 module "cloudwatch" {
   source               = "./modules/cloudwatch"
+  aws_region           = var.aws_region
   project_name         = local.project_env
   environment          = var.environment
   lambda_function_name = module.lambda.function_name

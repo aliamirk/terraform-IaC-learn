@@ -1,3 +1,8 @@
+variable "aws_region" {
+  description = "AWS region for dashboard widget metrics"
+  type        = string
+}
+
 variable "project_name" {
   type = string
 }

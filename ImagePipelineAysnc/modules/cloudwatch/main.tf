@@ -91,6 +91,7 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
         width  = 8
         height = 6
         properties = {
+          region = var.aws_region
           title  = "Lambda — invocations & errors"
           view   = "timeSeries"
           period = 60
@@ -109,6 +110,7 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
         width  = 8
         height = 6
         properties = {
+          region = var.aws_region
           title  = "Lambda — duration (p50 / p90 / p99)"
           view   = "timeSeries"
           period = 60
@@ -126,6 +128,7 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
         width  = 8
         height = 6
         properties = {
+          region = var.aws_region
           title  = "Lambda — concurrent executions"
           view   = "timeSeries"
           period = 60
@@ -144,6 +147,7 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
         width  = 8
         height = 6
         properties = {
+          region = var.aws_region
           title  = "SQS — queue depth"
           view   = "timeSeries"
           period = 60
@@ -161,6 +165,7 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
         width  = 8
         height = 6
         properties = {
+          region = var.aws_region
           title  = "DLQ — messages (should always be 0)"
           view   = "timeSeries"
           period = 60
@@ -180,6 +185,7 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
         width  = 8
         height = 6
         properties = {
+          region = var.aws_region
           title  = "SQS — message age (oldest message)"
           view   = "timeSeries"
           period = 60
@@ -198,6 +204,7 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
         width  = 8
         height = 6
         properties = {
+          region = var.aws_region
           title  = "Pipeline — images processed vs errors"
           view   = "timeSeries"
           period = 300
@@ -216,6 +223,7 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
         width  = 8
         height = 6
         properties = {
+          region = var.aws_region
           title  = "Pipeline — duplicate skip rate (%)"
           view   = "timeSeries"
           period = 300
@@ -232,6 +240,7 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
         width  = 8
         height = 6
         properties = {
+          region = var.aws_region
           title  = "Pipeline — batch size"
           view   = "timeSeries"
           period = 300
@@ -250,6 +259,7 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
         width  = 12
         height = 6
         properties = {
+          region = var.aws_region
           title  = "DynamoDB — read/write consumed capacity"
           view   = "timeSeries"
           period = 60
@@ -267,6 +277,7 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
         width  = 12
         height = 6
         properties = {
+          region = var.aws_region
           title  = "DynamoDB — latency (successful requests)"
           view   = "timeSeries"
           period = 60
@@ -286,7 +297,8 @@ resource "aws_cloudwatch_dashboard" "pipeline" {
         width  = 24
         height = 3
         properties = {
-          title = "Alarm status overview"
+          region = var.aws_region
+          title  = "Alarm status overview"
           alarms = [
             aws_cloudwatch_metric_alarm.lambda_errors.arn,
             aws_cloudwatch_metric_alarm.dlq_depth.arn,
